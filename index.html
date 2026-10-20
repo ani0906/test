@@ -275,40 +275,35 @@
   <script>
     const owlQuestions = [
       {
-        title: "第一夜：尋找獵場
-你剛離開父母的領地，肚子餓得發慌。你會選擇去哪裡尋找第一餐？",
+        title: "第一夜：尋找獵場\n你剛離開父母的領地，肚子餓得發慌。你會選擇去哪裡尋找第一餐？",
         options: [
-          { text: "A. 飛往人類果園邊緣（老鼠多，但可能有毒鼠藥或捕獸夾）", weight: 0.4 },
+          { text: "A. 飛往人類果園邊緣（老鼠多，但可能有毒鼠藥或捕獸鋏）", weight: 0.4 },
           { text: "B. 留在無人的荒草地（安全，但獵物稀少，可能挨餓）", weight: 0.8 }
         ]
       },
       {
-        title: "第二夜：致命誘惑
-你在草叢中發現一隻行動異常遲緩的肥大野鼠。你會：",
+        title: "第二夜：致命誘惑\n你在草叢中發現一隻行動異常遲緩的肥大野鼠。你會：",
         options: [
           { text: "A. 機不可失，立刻俯衝捕捉（可能是吃到農藥的老鼠）", weight: 0.2 },
           { text: "B. 覺得事有蹊蹺，放棄尋找下一隻（消耗大量體力）", weight: 0.9 }
         ]
       },
       {
-        title: "第三夜：潛在危機
-白天休息時，你察覺到附近有野狗群正在靠近。你會：",
+        title: "第三夜：潛在危機\n白天休息時，你察覺到附近有野狗群正在靠近。你會：",
         options: [
           { text: "A. 保持隱蔽，利用羽色偽裝躲在白茅草叢深處不動", weight: 0.7 },
           { text: "B. 驚慌起飛，尋找廢棄建築躲避（白天起飛容易引來猛禽或人群圍觀）", weight: 0.3 }
         ]
       },
       {
-        title: "第四夜：築巢繁衍
-春天到了，你需要尋找隱密的地面築巢。你會選擇：",
+        title: "第四夜：築巢繁衍\n春天到了，你需要尋找隱密的地面築巢。你會選擇：",
         options: [
           { text: "A. 選擇看似空曠安全的廢棄光電板下方（容易面臨除草劑或人為干擾）", weight: 0.4 },
           { text: "B. 尋找極度茂密但可能有蛇類出沒的深草叢（自然生態的挑戰）", weight: 0.8 }
         ]
       },
       {
-        title: "第五夜：寒冬覓食
-冬天獵物銳減，連日的低溫讓你體力透支。你會：",
+        title: "第五夜：寒冬覓食\n冬天獵物銳減，連日的低溫讓你體力透支。你會：",
         options: [
           { text: "A. 擴大夜間的狩獵範圍，低飛越過省道與防汛道路（極高的路殺風險）", weight: 0.3 },
           { text: "B. 減少活動量，在熟悉的小範圍耐心等待獵物出現", weight: 0.7 }
@@ -318,40 +313,35 @@
 
     const humanQuestions = [
       {
-        title: "情境一：田間鼠患
-你的果園最近鼠患嚴重，影響了收成。你會選擇：",
+        title: "情境一：田間鼠患\n你的果園最近鼠患嚴重，影響了收成。你會選擇：",
         options: [
           { text: "A. 放置老鼠藥快速解決鼠患（毒鼠可能被猛禽誤食二次中毒）", score: -2 },
           { text: "B. 設立棲架吸引猛禽幫忙抓老鼠（成本較高且需等待成效）", score: 2 }
         ]
       },
       {
-        title: "情境二：流浪犬問題
-你常去散步的野地最近出現了幾隻流浪狗，看起來有點瘦弱。你會：",
+        title: "情境二：流浪犬問題\n你常去散步的野地最近出現了幾隻流浪狗，看起來有點瘦弱。你會：",
         options: [
           { text: "A. 覺得可憐，定時帶飼料去餵食（可能導致犬群擴大，威脅野生動物）", score: -2 },
           { text: "B. 通報動保單位進行誘捕與結紮（減少遊蕩犬對生態的影響）", score: 2 }
         ]
       },
       {
-        title: "情境三：荒地開發
-你擁有一塊長滿白茅與雜草的荒地，有光電業者來洽談合作。你會：",
+        title: "情境三：荒地開發\n你擁有一塊長滿白茅與雜草的荒地，有光電業者來洽談合作。你會：",
         options: [
           { text: "A. 全部剷平鋪設光電板，增加被動收入（可能破壞草鴞潛在棲地）", score: -1 },
           { text: "B. 進行生態評估，保留部分草叢或採取友善生態的工法", score: 2 }
         ]
       },
       {
-        title: "情境四：除草作業
-夏天草長得很快，你需要整理農地邊緣。你會選擇：",
+        title: "情境四：除草作業\n夏天草長得很快，你需要整理農地邊緣。你會選擇：",
         options: [
-          { text: "A. 噴灑除草劑，省時省力（會破壞土壤與棲地）", score: -2 },
+          { text: "A. 噴灑除草劑，省時省力（會破壞土壤與微棲地）", score: -2 },
           { text: "B. 使用人工或機械割草，並保留部分草叢（耗時費力，但友善生態）", score: 2 }
         ]
       },
       {
-        title: "情境五：偶遇受傷野生動物
-你在路邊發現一隻看起來像貓頭鷹的鳥倒在地上。你會：",
+        title: "情境五：偶遇受傷野生動物\n你在路邊發現一隻看起來像貓頭鷹的鳥倒在地上。你會：",
         options: [
           { text: "A. 自己帶回家照顧或上網問網友怎麼養（可能延誤救援或餵錯食物）", score: -2 },
           { text: "B. 保持距離，立刻聯絡當地的野生動物急救站（專業救援）", score: 2 }
@@ -396,8 +386,7 @@
 
     function showQuestion() {
       const q = currentQuestions[currentQ];
-      document.getElementById('questionTitle').innerHTML = q.title.replace('
-', '<br><br>');
+      document.getElementById('questionTitle').innerHTML = q.title.replace('\n', '<br><br>');
       document.getElementById('progressFill').style.width = `${((currentQ) / currentQuestions.length) * 100}%`;
       
       const optionsBox = document.getElementById('optionsBox');
@@ -469,8 +458,7 @@
         let survivedOwls = Math.max(1, Math.round(basePopulation * owlSurvivalScore));
         if (owlSurvivalScore < 0.01) survivedOwls = 0; 
 
-        document.getElementById('statTextTop').innerText = "全台僅存不到 500 隻的草鴞中
-只有大約";
+        document.getElementById('statTextTop').innerText = "全台僅存不到 500 隻的草鴞中\n只有大約";
         
         if (survivedOwls === 0) {
           document.getElementById('statCount').innerText = "0";

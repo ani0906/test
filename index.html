@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>羽翼下的選擇：共生之境</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      transition: background 1s ease;
+    }
+
+    /* 角色背景色設定 */
+    body.owl-theme {
+      background: linear-gradient(135deg, #0d1b14, #1a2c22);
+    }
+    body.human-theme {
+      background: linear-gradient(135deg, #1e293b, #334155);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 20px;
+      padding: 36px 28px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      position: relative;
+    }
+
+    .owl-theme .container {
+      background: rgba(20, 36, 28, 0.85);
+      border-color: #2d4a3e;
+    }
+    .human-theme .container {
+      background: rgba(30, 41, 59, 0.85);
+      border-color: #475569;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+      color: #38bdf8; /* 人類預設藍 */
+      letter-spacing: 1px;
+    }
+    .owl-theme h1 { color: #f59e0b; }
+    .human-theme h1 { color: #38bdf8; }
+
+    p.desc {
+      color: #cbd5e1;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .btn-main {
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      padding: 16px 36px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .btn-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
+    }
+
+    .owl-theme .btn-main {
+      background: #f59e0b;
+      color: #0f172a;
+    }
+    .owl-theme .btn-main:hover {
+      background: #fbbf24;
+      box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+    }
+    
+    .human-theme .btn-main {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    .human-theme .btn-main:hover {
+      background: #7dd3fc;
+      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
+    }
+
+    /* 隱藏區塊 */
+    .game-box, .loader-box, .result-box {
+      display: none;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #334155;
+      border-radius: 3px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .owl-theme .progress-bar { background: #2d4a3e; }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #38bdf8;
+      transition: width 0.4s ease;
+    }
+    .owl-theme .progress-fill { background: #f59e0b; }
+
+    .question-title {
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.6;
+      margin-bottom: 28px;
+      text-align: left;
+      color: #f8fafc;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #475569;
+      padding: 18px 20px;
+      border-radius: 12px;
+      color: #e2e8f0;
+      font-size: 1rem;
+      line-height: 1.5;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .option-btn:hover {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+    }
+    .owl-theme .option-btn { border-color: #3f6250; }
+    .owl-theme .option-btn:hover {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    /* 結局區塊 */
+    .result-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .owl-theme .result-badge {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+    }
+    .human-theme .result-badge {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+    }
+
+    .result-title {
+      font-size: 1.8rem;
+      color: #f8fafc;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px dashed #475569;
+      padding: 24px;
+      border-radius: 16px;
+      margin: 24px 0;
+    }
+    .owl-theme .stat-box { border-color: #3f6250; }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 8px 0;
+    }
+    .owl-theme .stat-number { color: #f59e0b; }
+    .human-theme .stat-number { color: #38bdf8; }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #475569;
+      border-top: 4px solid #38bdf8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 40px auto;
+    }
+    .owl-theme .spinner {
+      border-color: #2d4a3e;
+      border-top-color: #f59e0b;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- 首頁 -->
+    <div id="startBox">
+      <h1>羽翼下的選擇：共生之境</h1>
+      <p class="desc">在台灣南部的淺山與惡地，野生動物與人類的生活圈高度重疊。<br><br>你可以選擇化身為一隻剛離巢的小草鴞，在嚴酷的自然與人為環境中求生；也可以選擇扮演在這片土地上生活的人類，你的每個決定都將牽動這片土地的生態。<br><br>請選擇你的視角：</p>
+      <button class="btn-main" onclick="selectRole('owl')" style="background: #f59e0b; color: #0f172a;">成為 草鴞 🦉</button>
+      <button class="btn-main" onclick="selectRole('human')" style="background: #38bdf8; color: #0f172a;">成為 人類 🚶</button>
+    </div>
+
+    <!-- 遊戲中 -->
+    <div id="gameBox" class="game-box">
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <div id="questionTitle" class="question-title">題目載入中...</div>
+      <div class="options" id="optionsBox"></div>
+    </div>
+
+    <!-- 載入中 -->
+    <div id="loaderBox" class="loader-box">
+      <div class="spinner"></div>
+      <p style="color:#cbd5e1; margin-top:20px;" id="loaderText">正在計算生態存活率與軌跡...</p>
+    </div>
+
+    <!-- 結局 -->
+    <div id="resultBox" class="result-box">
+      <span class="result-badge" id="resultBadge">生態觀測報告</span>
+      <h2 id="resultTitle" class="result-title">靈魂稱號</h2>
+      <p id="resultDesc" class="desc" style="text-align:center; font-size:0.95rem;">生態描述</p>
+      
+      <div class="stat-box">
+        <div style="font-size: 0.95rem; color: #cbd5e1;" id="statTextTop">全台僅存不到 500 隻的草鴞中</div>
+        <div style="font-size: 0.95rem; color: #cbd5e1;">只有大約</div>
+        <div id="statCount" class="stat-number">12</div>
+        <div style="font-size: 0.95rem; color: #cbd5e1;" id="statTextBottom">隻能跟你一樣做出這些抉擇並存活</div>
+      </div>
+
+      <button class="btn-main" onclick="resetGame()">重新選擇命運</button>
+    </div>
+  </div>
+
+  <script>
+    const owlQuestions = [
+      {
+        title: "第一夜：尋找獵場
+你剛離開父母的領地，肚子餓得發慌。你會選擇去哪裡尋找第一餐？",
+        options: [
+          { text: "A. 飛往人類果園邊緣（老鼠多，但可能有毒鼠藥或捕獸夾）", weight: 0.4 },
+          { text: "B. 留在無人的荒草地（安全，但獵物稀少，可能挨餓）", weight: 0.8 }
+        ]
+      },
+      {
+        title: "第二夜：致命誘惑
+你在草叢中發現一隻行動異常遲緩的肥大野鼠。你會：",
+        options: [
+          { text: "A. 機不可失，立刻俯衝捕捉（可能是吃到農藥的老鼠）", weight: 0.2 },
+          { text: "B. 覺得事有蹊蹺，放棄尋找下一隻（消耗大量體力）", weight: 0.9 }
+        ]
+      },
+      {
+        title: "第三夜：潛在危機
+白天休息時，你察覺到附近有野狗群正在靠近。你會：",
+        options: [
+          { text: "A. 保持隱蔽，利用羽色偽裝躲在白茅草叢深處不動", weight: 0.7 },
+          { text: "B. 驚慌起飛，尋找廢棄建築躲避（白天起飛容易引來猛禽或人群圍觀）", weight: 0.3 }
+        ]
+      },
+      {
+        title: "第四夜：築巢繁衍
+春天到了，你需要尋找隱密的地面築巢。你會選擇：",
+        options: [
+          { text: "A. 選擇看似空曠安全的廢棄光電板下方（容易面臨除草劑或人為干擾）", weight: 0.4 },
+          { text: "B. 尋找極度茂密但可能有蛇類出沒的深草叢（自然生態的挑戰）", weight: 0.8 }
+        ]
+      },
+      {
+        title: "第五夜：寒冬覓食
+冬天獵物銳減，連日的低溫讓你體力透支。你會：",
+        options: [
+          { text: "A. 擴大夜間的狩獵範圍，低飛越過省道與防汛道路（極高的路殺風險）", weight: 0.3 },
+          { text: "B. 減少活動量，在熟悉的小範圍耐心等待獵物出現", weight: 0.7 }
+        ]
+      }
+    ];
+
+    const humanQuestions = [
+      {
+        title: "情境一：田間鼠患
+你的果園最近鼠患嚴重，影響了收成。你會選擇：",
+        options: [
+          { text: "A. 放置老鼠藥快速解決鼠患（毒鼠可能被猛禽誤食二次中毒）", score: -2 },
+          { text: "B. 設立棲架吸引猛禽幫忙抓老鼠（成本較高且需等待成效）", score: 2 }
+        ]
+      },
+      {
+        title: "情境二：流浪犬問題
+你常去散步的野地最近出現了幾隻流浪狗，看起來有點瘦弱。你會：",
+        options: [
+          { text: "A. 覺得可憐，定時帶飼料去餵食（可能導致犬群擴大，威脅野生動物）", score: -2 },
+          { text: "B. 通報動保單位進行誘捕與結紮（減少遊蕩犬對生態的影響）", score: 2 }
+        ]
+      },
+      {
+        title: "情境三：荒地開發
+你擁有一塊長滿白茅與雜草的荒地，有光電業者來洽談合作。你會：",
+        options: [
+          { text: "A. 全部剷平鋪設光電板，增加被動收入（可能破壞草鴞潛在棲地）", score: -1 },
+          { text: "B. 進行生態評估，保留部分草叢或採取友善生態的工法", score: 2 }
+        ]
+      },
+      {
+        title: "情境四：除草作業
+夏天草長得很快，你需要整理農地邊緣。你會選擇：",
+        options: [
+          { text: "A. 噴灑除草劑，省時省力（會破壞土壤與棲地）", score: -2 },
+          { text: "B. 使用人工或機械割草，並保留部分草叢（耗時費力，但友善生態）", score: 2 }
+        ]
+      },
+      {
+        title: "情境五：偶遇受傷野生動物
+你在路邊發現一隻看起來像貓頭鷹的鳥倒在地上。你會：",
+        options: [
+          { text: "A. 自己帶回家照顧或上網問網友怎麼養（可能延誤救援或餵錯食物）", score: -2 },
+          { text: "B. 保持距離，立刻聯絡當地的野生動物急救站（專業救援）", score: 2 }
+        ]
+      }
+    ];
+
+    const owlArchetypes = [
+      { title: "暗夜裡的傳奇獵手", desc: "你擁有極強的生存直覺與一絲絲好運。在險惡的環境中，你總能精準避開致命的人為陷阱與自然威脅，是這片惡地草原上的王者。" },
+      { title: "謹慎的荒野隱士", desc: "你生性機警，寧可餓肚子也不願輕易冒險。雖然生活艱辛，但你的謹慎讓你在充滿危機的淺山中，安然度過無數個危機四伏的夜晚。" },
+      { title: "勇敢的邊緣探索者", desc: "你不怕與人類環境共存，總是能在危險的邊緣地帶找到豐沛的資源。你的生活充滿挑戰，但也經常與死神擦身而過。" },
+      { title: "隨遇而安的草地精靈", desc: "你順應自然，不強求改變環境。無論是面對天敵還是人為開發，你都選擇用最原始的本能去適應這個快速變化的世界。" }
+    ];
+
+    const humanArchetypes = [
+      { title: "生態的共生守護者", desc: "你深刻理解人類與自然的連結。你的每一個決定都考慮到了這片土地上的其他生命，你是草鴞等野生動物在人類世界中最堅實的盟友。" },
+      { title: "務實的環境平衡者", desc: "你在人類發展與生態保育之間努力尋找平衡點。雖然有時必須妥協，但你仍盡力減少對環境的衝擊。" },
+      { title: "無心的生態干擾者", desc: "你並非充滿惡意，只是出於方便或缺乏資訊而做出決定。然而，這些無心之舉可能已在無形中對脆弱的生態系造成了壓力。" }
+    ];
+
+    let currentRole = '';
+    let currentQ = 0;
+    let owlSurvivalScore = 1.0;
+    let humanEcoScore = 0;
+    let currentQuestions = [];
+
+    function selectRole(role) {
+      currentRole = role;
+      document.body.className = role === 'owl' ? 'owl-theme' : 'human-theme';
+      
+      currentQuestions = role === 'owl' ? owlQuestions : humanQuestions;
+      
+      document.getElementById('startBox').style.display = 'none';
+      document.getElementById('gameBox').style.display = 'block';
+      
+      currentQ = 0;
+      owlSurvivalScore = 1.0;
+      humanEcoScore = 0;
+      
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = currentQuestions[currentQ];
+      document.getElementById('questionTitle').innerHTML = q.title.replace('
+', '<br><br>');
+      document.getElementById('progressFill').style.width = `${((currentQ) / currentQuestions.length) * 100}%`;
+      
+      const optionsBox = document.getElementById('optionsBox');
+      optionsBox.innerHTML = '';
+
+      q.options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt.text;
+        if (currentRole === 'owl') {
+          btn.onclick = () => selectOwlOption(opt.weight);
+        } else {
+          btn.onclick = () => selectHumanOption(opt.score);
+        }
+        optionsBox.appendChild(btn);
+      });
+    }
+
+    function selectOwlOption(weight) {
+      owlSurvivalScore *= weight;
+      nextQuestion();
+    }
+
+    function selectHumanOption(score) {
+      humanEcoScore += score;
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      if (currentQ < currentQuestions.length) {
+        showQuestion();
+      } else {
+        showLoader();
+      }
+    }
+
+    function showLoader() {
+      document.getElementById('gameBox').style.display = 'none';
+      document.getElementById('loaderBox').style.display = 'block';
+      
+      if (currentRole === 'owl') {
+        document.getElementById('loaderText').innerText = "正在計算生態存活率與軌跡...";
+      } else {
+        document.getElementById('loaderText').innerText = "正在評估你的決策對土地的影響...";
+      }
+
+      setTimeout(() => {
+        showResult();
+      }, 2200);
+    }
+
+    function showResult() {
+      document.getElementById('loaderBox').style.display = 'none';
+      document.getElementById('resultBox').style.display = 'block';
+
+      if (currentRole === 'owl') {
+        let archetype;
+        if (owlSurvivalScore >= 0.15) archetype = owlArchetypes[0]; // 傳奇獵手
+        else if (owlSurvivalScore >= 0.08) archetype = owlArchetypes[1]; // 荒野隱士
+        else if (owlSurvivalScore >= 0.03) archetype = owlArchetypes[3]; // 草地精靈
+        else archetype = owlArchetypes[2]; // 邊緣探索者
+
+        document.getElementById('resultBadge').innerText = "草鴞生存報告";
+        document.getElementById('resultTitle').innerText = archetype.title;
+        document.getElementById('resultDesc').innerText = archetype.desc;
+
+        const basePopulation = 500;
+        let survivedOwls = Math.max(1, Math.round(basePopulation * owlSurvivalScore));
+        if (owlSurvivalScore < 0.01) survivedOwls = 0; 
+
+        document.getElementById('statTextTop').innerText = "全台僅存不到 500 隻的草鴞中
+只有大約";
+        
+        if (survivedOwls === 0) {
+          document.getElementById('statCount').innerText = "0";
+          document.getElementById('statCount').style.color = "#ef4444";
+        } else {
+          document.getElementById('statCount').innerText = survivedOwls;
+          document.getElementById('statCount').style.color = "#f59e0b";
+        }
+        document.getElementById('statTextBottom').innerText = "隻能跟你一樣做出這些抉擇並存活";
+        
+      } else {
+        let archetype;
+        let impactPercentage;
+        if (humanEcoScore >= 7) {
+          archetype = humanArchetypes[0]; // 共生守護者
+          impactPercentage = "保護了 90%";
+        } else if (humanEcoScore >= 2) {
+          archetype = humanArchetypes[1]; // 環境平衡者
+          impactPercentage = "維持了 50%";
+        } else {
+          archetype = humanArchetypes[2]; // 生態干擾者
+          impactPercentage = "威脅了 80%";
+        }
+
+        document.getElementById('resultBadge').innerText = "人類環境影響報告";
+        document.getElementById('resultTitle').innerText = archetype.title;
+        document.getElementById('resultDesc').innerText = archetype.desc;
+
+        document.getElementById('statTextTop').innerText = "你的日常決策";
+        document.getElementById('statCount').innerText = impactPercentage;
+        document.getElementById('statCount').style.color = "#38bdf8";
+        if (humanEcoScore < 2) document.getElementById('statCount').style.color = "#ef4444";
+        document.getElementById('statTextBottom').innerText = "在地草鴞的棲地與生存機會";
+      }
+    }
+
+    function resetGame() {
+      document.getElementById('resultBox').style.display = 'none';
+      document.getElementById('startBox').style.display = 'block';
+      document.body.className = '';
+    }
+  </script>
+</body>
+</html>
